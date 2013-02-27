@@ -29,7 +29,7 @@ class wam {
 
         // instantiate the database object
         $this->db = new db_sqlsrv($config);
-        $this->themepath = 'layout/themes/default/';
+        $this->themepath = 'layout/themes/default';
         // instantiate the template object
         $this->tpl = new wam_template();
         $this->tpl->assign('themepath', $this->themepath);
