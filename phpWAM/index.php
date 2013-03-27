@@ -41,12 +41,12 @@ if (!isset($_SESSION['username'])) {
 $wam = new wam($DB_CONFIG);
 
 // set the current action
-$_action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'view';
+$_action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'dashboard';
 
 switch ($_action) {
-    case 'view':
+    case 'dashboard':
     default:
-        $wam->ni("view");
+        $wam->ni("dashboard");
         var_dump($_REQUEST);
         break;
 }
