@@ -43,20 +43,23 @@ class login {
                 return FALSE;
             }
             return TRUE;
-        } else
+        }
+        else
             $this->userdetails = null;
         return FALSE;
     }
 
-    function getDetails() {
-        return $this->userdetails;
+    private function getUserDetailsFromDB($guid) {
+        if ($userdetails = $this->dbh->getUserDetails($guid)) {
+            $this->userdetails = $userdetails;
+            return TRUE;
+        }
+        else
+            return FALSE;
     }
 
-    function checkIfUserIsAdmin($username) {
-        if ($userdetails = $this->dbh->getUserDetails($username)) {
-            return (bool) $userdetails["isitscheduleadmin"];
-        } else
-            return FALSE;
+    public function getUserDetails() {
+        return $this->userdetails;
     }
 
 }

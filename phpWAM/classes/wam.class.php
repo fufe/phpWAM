@@ -36,7 +36,7 @@ class wam {
     }
 
     function ni($func) {
-        echo('Function ' . $func . ' is not yet implemented');
+        echo('Function ' . $func . ' is not yet implemented<br>');
     }
 
 }
