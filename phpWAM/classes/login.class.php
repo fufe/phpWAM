@@ -36,7 +36,7 @@ class login {
                     $this->userdetails['username'] = $details[1];
                     $this->userdetails['domain'] = $details[0];
                     $this->userdetails['displayname'] = $userinfo->displayname;
-                    $this->userdetails['isitscheduleadmin'] = $this->checkIfUserIsAdmin($details[1]);
+//                    $this->userdetails['isitscheduleadmin'] = $this->checkIfUserIsAdmin($details[1]);
                 }
             } else {
                 $this->userdetails = null;
@@ -44,19 +44,17 @@ class login {
             }
             return TRUE;
         }
-        else
-            $this->userdetails = null;
+        else { $this->userdetails = null; }
         return FALSE;
     }
 
-    private function getUserDetailsFromDB($guid) {
-        if ($userdetails = $this->dbh->getUserDetails($guid)) {
-            $this->userdetails = $userdetails;
-            return TRUE;
-        }
-        else
-            return FALSE;
-    }
+//    private function getUserDetailsFromDB($guid) {
+//        if ($userdetails = $this->dbh->getUserDetails($guid)) {
+//            $this->userdetails = $userdetails;
+//            return TRUE;
+//        }
+//        else { return FALSE; }
+//    }
 
     public function getUserDetails() {
         return $this->userdetails;

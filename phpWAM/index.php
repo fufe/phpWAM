@@ -33,8 +33,8 @@ session_start();
 if (!isset($_SESSION['username'])) {
     $loginh = new login($LDAP_CONFIG, $DB_CONFIG);
      if ($loginh->authFrom_IIS_AUTHUSER($_SERVER['AUTH_USER'])) {
-         $_SESSION = array_merge($_SESSION, $loginh->getDetails());
-     } else die('Unknown user');    
+         $_SESSION = \array_merge($_SESSION, $loginh->getUserDetails());
+     } else { die('Unknown user');}
 }
 
 // Instanciating main class.
