@@ -16,38 +16,24 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[Users](
-	[ID] [int] IDENTITY(0,1) PRIMARY KEY CLUSTERED,
-	[CreatedBy] [int] NOT NULL,
-	[CreatedAt] [datetime] NOT NULL,
-	[ModifiedBy] [int],
-	[ModifiedAt] [datetime],
-	[DeletedBy] [int],
-	[DeletedAt] [datetime],
-	[Name] nvarchar(100) UNIQUE NOT NULL,
-	[Login] nvarchar(100) UNIQUE NOT NULL,
-	[Password] char(32) NULL,
-	[EMail] varchar(100) NOT NULL,
+CREATE TABLE [Users](
+	[ID] int IDENTITY(0,1) PRIMARY KEY,
+	[Name] nvarchar(255) UNIQUE NOT NULL,
+	[Login] nvarchar(255) UNIQUE NOT NULL,
+	[DivID] int NOT NULL,
 	[MaxVacation] int NOT NULL,
-	[ActiveFrom] [date] NOT NULL,
-	[ActiveTill] [date] NOT NULL,
-	[GrpMember] int NOT NULL,
-	[IsSubstitute] tinyint NOT NULL,
-	[IsEngineer] tinyint NOT NULL
+	[ActiveStart] date NOT NULL,
+	[ActiveEnd] date NOT NULL,
+	[Permissions] int NOT NULL,
+	[IsSubstitute] bit NOT NULL,
+	[IsEngineer] bit NOT NULL,
+	[IsDeleted] bit NOT NULL DEFAULT 0
 	) 
-	ON [PRIMARY] 
-
 GO
 
-CREATE TABLE [dbo].[Groups](
-	[ID] [int] IDENTITY(1,1) PRIMARY KEY CLUSTERED,
-	[CreatedBy] [int] NOT NULL,
-	[CreatedAt] [datetime] NOT NULL,
-	[ModifiedBy] [int],
-	[ModifiedAt] [datetime],
-	[DeletedBy] [int],
-	[DeletedAt] [datetime],
-	[Name] nvarchar(100) UNIQUE NOT NULL,
+CREATE TABLE [Groups](
+	[ID] [int] IDENTITY(0,1) PRIMARY KEY,
+	[Name] nvarchar(255) UNIQUE NOT NULL,
 	[DivID] int NOT NULL,
 	[Supervisor1] int NOT NULL,
 	[Supervisor2] int NULL,
@@ -56,103 +42,53 @@ CREATE TABLE [dbo].[Groups](
 	[Approver2] int NULL,
 	[Approver3] int NULL
 	) 
-	ON [PRIMARY] 
-
 GO
 
-CREATE TABLE [dbo].[Divisions](
-	[ID] [int] IDENTITY(1,1) PRIMARY KEY CLUSTERED,
-	[CreatedBy] [int] NOT NULL,
-	[CreatedAt] [datetime] NOT NULL,
-	[ModifiedBy] [int],
-	[ModifiedAt] [datetime],
-	[DeletedBy] [int],
-	[DeletedAt] [datetime],
-	[Name] nvarchar(100) UNIQUE NOT NULL
+CREATE TABLE [Divisions](
+	[ID] int IDENTITY(0,1) PRIMARY KEY,
+	[Name] nvarchar(255) UNIQUE NOT NULL
 	)
-	ON [PRIMARY] 
-
 GO
 
-CREATE TABLE [dbo].[Orgs](
-	[ID] [int] IDENTITY(0,1) PRIMARY KEY CLUSTERED,
-	[CreatedBy] [int] NOT NULL,
-	[CreatedAt] [datetime] NOT NULL,
-	[ModifiedBy] [int],
-	[ModifiedAt] [datetime],
-	[DeletedBy] [int],
-	[DeletedAt] [datetime],
-	[Name] nvarchar(250) UNIQUE NOT NULL
+CREATE TABLE [Orgs](
+	[ID] int IDENTITY(0,1) PRIMARY KEY,
+	[Name] nvarchar(255) UNIQUE NOT NULL
 	)
-	ON [PRIMARY]
 GO
 
-CREATE TABLE [dbo].[Competencies](
-	[CreatedBy] [int] NOT NULL,
-	[CreatedAt] [datetime] NOT NULL,
-	[ModifiedBy] [int],
-	[ModifiedAt] [datetime],
-	[DeletedBy] [int],
-	[DeletedAt] [datetime],
-	[OrgID] [int] NOT NULL,
-	[EngineerID] [int] NOT NULL,
-	[CompLevel] [tinyint] NOT NULL
-) ON [PRIMARY]
-
+CREATE TABLE [Competencies](
+	[OrgID] int NOT NULL,
+	[EngineerID] int NOT NULL,
+	[CompLevel] tinyint NOT NULL,
+        CONSTRAINT pk_Competency PRIMARY KEY (OrgID, EngineerID)
+	)
 GO
 
-CREATE TABLE [dbo].[ResourceRequest](
-	[ID] [int] IDENTITY(1,1) PRIMARY KEY CLUSTERED,
-	[CreatedBy] [int] NOT NULL,
-	[CreatedAt] [datetime] NOT NULL,
-	[ModifiedBy] [int],
-	[ModifiedAt] [datetime],
-	[DeletedBy] [int],
-	[DeletedAt] [datetime],
-	[RQType] [tinyint] NOT NULL,
-	[OrgID] [int],
-	[UserID] [int],
-	[DateFrom] [date] NOT NULL,
-	[DateTill] [date] NOT NULL,
-	[IsChecked] [tinyint] NOT NULL,
-	[IsApproved] [tinyint] NOT NULL
+CREATE TABLE [ResourceRequest](
+	[ID] int IDENTITY(0,1) PRIMARY KEY,
+	[REQType] tinyint NOT NULL,
+	[OrgID] int,
+	[UserID] int,
+	[DateFrom] date NOT NULL,
+	[DateTill] date NOT NULL,
+	[IsChecked] bit NOT NULL DEFAULT 0,
+	[IsApproved] bit NOT NULL DEFAULT 0
+	)
+GO
+
+CREATE TABLE [ResourceFulFill](
+	[ID] int IDENTITY(0,1) PRIMARY KEY,
+	[Type] tinyint NOT NULL,
+	[ReqID] int NOT NULL,
+	[EngineerID] int NOT NULL,
+	[Date] date NOT NULL
 	) 
-	ON [PRIMARY]
-
 GO
 
-CREATE TABLE [dbo].[ResourceFulFill](
-	[ID] [int] IDENTITY(1,1) PRIMARY KEY CLUSTERED,
-	[CreatedBy] [int] NOT NULL,
-	[CreatedAt] [datetime] NOT NULL,
-	[ModifiedBy] [int],
-	[ModifiedAt] [datetime],
-	[DeletedBy] [int],
-	[DeletedAt] [datetime],
-	[FFType] [tinyint] NOT NULL,
-	[RequestID] [int] NOT NULL,
-	[EngineerID] [int] NOT NULL,
-	[DateFrom] [date] NOT NULL,
-	[DateTill] [date] NOT NULL
-	) 
-	ON [PRIMARY]
-
-GO
-
-CREATE TABLE [dbo].[Exceptions](
-	[ID] [int] IDENTITY(1,1) PRIMARY KEY CLUSTERED,
-	[CreatedBy] [int] NOT NULL,
-	[CreatedAt] [datetime] NOT NULL,
-	[ModifiedBy] [int],
-	[ModifiedAt] [datetime],
-	[DeletedBy] [int],
-	[DeletedAt] [datetime],
-	[OrgID] [int] NOT NULL,
-	[ExType] [tinyint] NOT NULL,
-	[DateFrom] [date] NOT NULL,
-	[DateTill] [date] NOT NULL,
+CREATE TABLE [Exceptions](
+	[ID] int IDENTITY(0,1) PRIMARY KEY,
+	[Date] date NOT NULL,
+        [WorkDay] bit NOT NULL,
 	[Description] nvarchar(250)
 	) 
-	ON [PRIMARY]
-
 GO
