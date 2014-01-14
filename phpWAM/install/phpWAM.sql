@@ -27,7 +27,8 @@ CREATE TABLE [Users](
 	[Permissions] int NOT NULL,
 	[IsSubstitute] bit NOT NULL,
 	[IsEngineer] bit NOT NULL,
-	[IsDeleted] bit NOT NULL DEFAULT 0
+	[IsDeleted] bit NOT NULL DEFAULT 0,
+        [Theme] nvarchar(50) DEFAULT NULL
 	) 
 GO
 
@@ -85,10 +86,13 @@ CREATE TABLE [ResourceFulFill](
 	) 
 GO
 
-CREATE TABLE [Exceptions](
-	[ID] int IDENTITY(0,1) PRIMARY KEY,
-	[Date] date NOT NULL,
-        [WorkDay] bit NOT NULL,
-	[Description] nvarchar(250)
+CREATE TABLE [Calendar](
+	[Date] date PRIMARY KEY,
+        [WorkDay] bit NOT NULL
 	) 
 GO
+
+SET IDENTITY_INSERT [dbo].[Users] ON
+INSERT [dbo].[Users] ([ID], [Name], [Login], [DivID], [MaxVacation], [ActiveStart], [ActiveEnd], [Permissions], [IsSubstitute], [IsEngineer], [IsDeleted])
+ VALUES (0, N'phpWAM Administrator', N'phpWAM.admin', 1, 20, CAST(0x07240B00 AS Date), CAST(0xDAB93700 AS Date), 1073741823, 0, 0, 0)
+SET IDENTITY_INSERT [dbo].[Users] OFF
