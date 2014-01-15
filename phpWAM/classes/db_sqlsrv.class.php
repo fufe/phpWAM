@@ -26,9 +26,12 @@ class db_sqlsrv {
     }
 
     function getUserDetails($username) {
-//        $sth = $this->dbh->query("SELECT * FROM wam_users WHERE account='$username'");
-//        return $sth->fetch(PDO::FETCH_ASSOC);
-        return TRUE;
+        $sth = $this->dbh->query("SELECT * FROM Users WHERE login='$username'");
+        if ($sth == FALSE) {
+            return FALSE;
+        } else {
+            return $sth->fetch(PDO::FETCH_ASSOC);
+        }
     }
 
 }

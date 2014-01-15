@@ -31,30 +31,36 @@ class login {
         if ($auth_user != '') {
             $details = explode('\\', $auth_user);
             if (strtoupper($details[0]) == strtoupper($this->ldap_config['domain'])) {
-                $userinfo = $this->ldaph->user()->infoCollection($details[1], array("*"));
-                if ($userinfo) {
-                    $this->userdetails['username'] = $details[1];
-                    $this->userdetails['domain'] = $details[0];
-                    $this->userdetails['displayname'] = $userinfo->displayname;
-//                    $this->userdetails['isitscheduleadmin'] = $this->checkIfUserIsAdmin($details[1]);
-                }
+//                $userinfo = $this->ldaph->user()->infoCollection($details[1], array("*"));
+//                if ($userinfo) {
+//                    $this->userdetails['username'] = $details[1];
+//                    $this->userdetails['domain'] = $details[0];
+//                    $this->userdetails['displayname'] = $userinfo->displayname;
+////                    $this->userdetails['isitscheduleadmin'] = $this->checkIfUserIsAdmin($details[1]);
+//                }
+                if ($this->getUserDetailsFromDB($details[1]))
+                    return TRUE;
+                else
+                    return FALSE;
             } else {
                 $this->userdetails = null;
                 return FALSE;
             }
             return TRUE;
+        } else {
+            $this->userdetails = null;
         }
-        else { $this->userdetails = null; }
         return FALSE;
     }
 
-//    private function getUserDetailsFromDB($guid) {
-//        if ($userdetails = $this->dbh->getUserDetails($guid)) {
-//            $this->userdetails = $userdetails;
-//            return TRUE;
-//        }
-//        else { return FALSE; }
-//    }
+    private function getUserDetailsFromDB($guid) {
+        if ($userdetails = $this->dbh->getUserDetails($guid)) {
+            $this->userdetails = $userdetails;
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
 
     public function getUserDetails() {
         return $this->userdetails;

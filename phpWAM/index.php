@@ -33,17 +33,18 @@ session_start();
 if (!isset($_SESSION['username'])) {
     $loginh = new login($LDAP_CONFIG, $DB_CONFIG);
      if ($loginh->authFrom_IIS_AUTHUSER($_SERVER['AUTH_USER'])) {
-         $_SESSION = \array_merge($_SESSION, $loginh->getUserDetails());
-     } else { die('Unknown user');}
+         $_SESSION = array_merge($_SESSION, $loginh->getUserDetails());
+     } else { die('Authentication failed - Unknown user or server is not supporting Windows Authentication.');}
 }
 
 // Instanciating main class.
 $wam = new wam($DB_CONFIG);
 
 // set the current action
-$_action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'dashboard';
+$_page = isset($_REQUEST['page']) ? $_REQUEST['page'] : 'dashboard';
+$_action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
-switch ($_action) {
+switch ($_page) {
     case 'dashboard':
     default:
         $wam->ni("dashboard");
