@@ -10,6 +10,13 @@ define('phpWAM_DIR', dirname(__FILE__) . '/');
 // Define SMARTY_DIR
 define('SMARTY_DIR', phpWAM_DIR . 'classes/Smarty/');
 
+// Define permissions
+define('CAN_LIST_ALL', 1);
+define('CAN_EDIT_USERS', 2);
+define('CAN_EDIT_REQUESTS', 4);
+define('CAN_EDIT_SELF_PROJECTS', 8);
+define('CAN_APPROVE_REQUEST', 16);
+
 // Loading configuration
 require phpWAM_DIR . 'config.php';
 
@@ -45,6 +52,13 @@ $_page = isset($_REQUEST['page']) ? $_REQUEST['page'] : 'dashboard';
 $_action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 switch ($_page) {
+    case 'setup':
+        $wam->ni("setup");
+        break;
+    case 'parse':
+        $wam->ni("parse");
+        var_dump($_REQUEST);
+        break;
     case 'dashboard':
     default:
         $wam->ni("dashboard");
