@@ -47,13 +47,25 @@ GO
 
 CREATE TABLE [Divisions](
 	[ID] int IDENTITY(0,1) PRIMARY KEY,
+	[ShortName] nvarchar(12) UNIQUE NOT NULL,
 	[Name] nvarchar(255) UNIQUE NOT NULL
 	)
 GO
 
 CREATE TABLE [Orgs](
 	[ID] int IDENTITY(0,1) PRIMARY KEY,
+	[ShortName] nvarchar(12) UNIQUE NOT NULL,
 	[Name] nvarchar(255) UNIQUE NOT NULL
+	)
+GO
+
+CREATE TABLE [Contracts](
+	[ID] int IDENTITY(0,1) PRIMARY KEY
+	)
+GO
+
+CREATE TABLE [PermanentAssignments](
+	[ID] int IDENTITY(0,1) PRIMARY KEY
 	)
 GO
 
@@ -82,7 +94,8 @@ CREATE TABLE [ResourceFulFill](
 	[Type] tinyint NOT NULL,
 	[ReqID] int NOT NULL,
 	[EngineerID] int NOT NULL,
-	[Date] date NOT NULL
+	[Date] date NOT NULL,
+        [Hours] int NOT NULL DEFAULT 8
 	) 
 GO
 
@@ -94,5 +107,10 @@ GO
 
 SET IDENTITY_INSERT [dbo].[Users] ON
 INSERT [dbo].[Users] ([ID], [Name], [Login], [DivID], [MaxVacation], [ActiveStart], [ActiveEnd], [Permissions], [IsSubstitute], [IsEngineer], [IsDeleted])
- VALUES (0, N'phpWAM Administrator', N'phpWAM.admin', 1, 20, CAST(0x07240B00 AS Date), CAST(0xDAB93700 AS Date), 1073741823, 0, 0, 0)
+ VALUES 
+ (0, N'phpWAM Administrator', N'phpWAM.admin', 1, 20, CAST(0x07240B00 AS Date), CAST(0xDAB93700 AS Date), 1073741823, 0, 0, 0),
+ (1, N'Jogtalan Jogász', N'jogasz.jogtalan', 1, 20, CAST(0x07240B00 AS Date), CAST(0xDAB93700 AS Date), 0, 0, 0, 0)
 SET IDENTITY_INSERT [dbo].[Users] OFF
+
+USE [master]
+GO

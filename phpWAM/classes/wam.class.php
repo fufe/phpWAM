@@ -39,4 +39,17 @@ class wam {
         echo('Function ' . $func . ' is not yet implemented<br>');
     }
 
+    function error($message) {
+        echo('An error has been occured: ' . $message . '<br>');
+    }
+
+    function list_users() {
+        if ($users = $this->db->getUsers()) {
+            $this->tpl->assign('users', $users);
+            $this->tpl->display('list_users.tpl');
+        } else {
+            $this->error("No users found");
+        }
+    }
+
 }

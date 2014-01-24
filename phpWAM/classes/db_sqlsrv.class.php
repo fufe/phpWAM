@@ -33,5 +33,14 @@ class db_sqlsrv {
             return $sth->fetch(PDO::FETCH_ASSOC);
         }
     }
+    
+    function getUsers() {
+        $sth = $this->dbh->query("SELECT ID,Name,Login FROM Users ORDER BY name");
+        if ($sth == FALSE) {
+            return FALSE;
+        } else {
+            return $sth->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
 
 }

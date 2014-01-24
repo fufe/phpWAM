@@ -11,7 +11,7 @@ define('phpWAM_DIR', dirname(__FILE__) . '/');
 define('SMARTY_DIR', phpWAM_DIR . 'classes/Smarty/');
 
 // Define permissions
-define('CAN_LIST_ALL', 1);
+define('CAN_LIST_FULL', 1);
 define('CAN_EDIT_USERS', 2);
 define('CAN_EDIT_REQUESTS', 4);
 define('CAN_EDIT_SELF_PROJECTS', 8);
@@ -39,9 +39,11 @@ session_start();
 // Checking if user already logged in
 if (!isset($_SESSION['username'])) {
     $loginh = new login($LDAP_CONFIG, $DB_CONFIG);
-     if ($loginh->authFrom_IIS_AUTHUSER($_SERVER['AUTH_USER'])) {
-         $_SESSION = array_merge($_SESSION, $loginh->getUserDetails());
-     } else { die('Authentication failed - Unknown user or server is not supporting Windows Authentication.');}
+    if ($loginh->authFrom_IIS_AUTHUSER($_SERVER['AUTH_USER'])) {
+        $_SESSION = array_merge($_SESSION, $loginh->getUserDetails());
+    } else {
+        die('Authentication failed - Unknown user or server is not supporting Windows Authentication.');
+    }
 }
 
 // Instanciating main class.
@@ -54,6 +56,13 @@ $_action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 switch ($_page) {
     case 'setup':
         $wam->ni("setup");
+        break;
+    case 'list_users':
+        if ((int) $_SESSION['Permissions'] && CAN_EDIT_USERS != 0) {
+            $wam->list_users();
+        } else {
+            $wam->error("ACCESS DENIED!");
+        }
         break;
     case 'parse':
         $wam->ni("parse");
